@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>BrazilDataAPI: Access Brazilian Economic, Demographic, Environmental, and Geopolitical Data via RESTful APIs and Curated Datasets</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">BrazilDataAPI: Access Brazilian Economic,
+Demographic, Environmental, and Geopolitical Data via RESTful APIs and
+Curated Datasets</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BrazilDataAPI)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="co">#&gt; Adjuntando el paquete: &#39;dplyr&#39;</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt;     filter, lag</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span></code></pre></div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The <code>BrazilDataAPI</code> package provides a unified interface
+to access open data from the <strong>BrasilAPI</strong> and the
+<strong>REST Countries API</strong>, with a focus on <em>Brazil</em>. It
+allows users to easily retrieve up-to-date information on postal codes,
+banks, economic indicators, holidays, company registrations, and
+international country-level data relevant to <em>Brazil</em>.</p>
+<p>In addition to API-access functions, the package includes a
+collection of curated datasets related to <em>Brazil</em>, covering
+diverse domains such as demographics (male and female population by
+state and year), river levels in <em>Manaus</em>, environmental emission
+factors in <em>São Paulo</em>, Brazilian film festivals, and historical
+yellow fever outbreaks.</p>
+<p><code>BrazilDataAPI</code> is designed to support research, teaching,
+and data analysis focused on Brazil by integrating public RESTful APIs
+with high-quality, domain-specific datasets into a single, easy-to-use R
+package.</p>
+<div id="functions-for-brazildataapi" class="section level2">
+<h2>Functions for BrazilDataAPI</h2>
+<p>The <code>BrazilDataAPI</code> package provides several core
+functions to access real-time and structured information about Brazil
+from public APIs such as <a href="https://brasilapi.com.br/">BrasilAPI</a> and <a href="https://restcountries.com/">REST Countries</a>. Below is a list of
+the main functions included in the package:</p>
+<ul>
+<li><p><code>get_brazil_banks()</code>: Get List of Banks in
+Brazil</p></li>
+<li><p><code>get_brazil_cep()</code>: Get Address Information by
+Brazilian CEP (Postal Code) Example:
+<em>get_brazil_cep(“89010025”)</em></p></li>
+<li><p><code>get_brazil_cnpj()</code>: Get Company Information by CNPJ
+(Brazil) Example: <em>get_brazil_cnpj(“19131243000197”)</em></p></li>
+<li><p><code>get_brazil_municipalities()</code>: Get Municipalities of a
+Brazilian State from IBGE Example:
+<em>get_brazil_municipalities(“SP”)</em></p></li>
+<li><p><code>get_brazil_rate_name()</code>: Get Specific Brazilian
+Economic Rate by Name Example:
+<em>get_brazil_rate_name(“CDI”)</em></p></li>
+<li><p><code>get_brazil_rates()</code>: Get Official Interest Rates and
+Indexes from Brazil</p></li>
+<li><p><code>get_brazil_vehicle_brands()</code>: Get Vehicle Brands from
+BrasilAPI (FIPE Data) Example:
+<em>get_brazil_vehicle_brands(“motos”)</em>,<em>get_brazil_vehicle_brands(“caminhoes”)</em></p></li>
+<li><p><code>get_country_info()</code>: Get essential information about
+Brazil or any other country by its full name Example:
+<em>get_country_info(“Brazil”)</em>,<em>get_country_info(“brazil”)</em>,<em>get_country_info(“Peru”)</em></p></li>
+<li><p><code>view_datasets_BrazilDataAPI()</code>: Lists all curated
+datasets included in the <code>BrazilDataAPI</code> package</p></li>
+</ul>
+<p>These functions allow users to access high-quality and structured
+information on <code>Brazil</code>, which can be combined with tools
+like <code>dplyr</code>, <code>tidyr</code>, and <code>ggplot2</code> to
+support a wide range of data analysis and visualization tasks. In the
+following sections, you’ll find examples on how to work with
+<code>BrazilDataAPI</code> in practical scenarios.</p>
+<div id="list-official-interest-rates-and-indexes-from-the-brasilapi" class="section level3">
+<h3>List official interest rates and indexes from the BrasilAPI</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># Retrieves official interest rates and indexes from the BrazilAPI</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>brazil_rates_001 <span class="ot">&lt;-</span> <span class="fu">get_brazil_rates</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">print</span>(brazil_rates_001)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt;   nome  valor</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;dbl&gt;</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; 1 Selic 15   </span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; 2 CDI   14.9 </span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="co">#&gt; 3 IPCA   5.32</span></span></code></pre></div>
+</div>
+<div id="get-vehicle-brands-from-brasilapi-fipe-data" class="section level3">
+<h3>Get Vehicle Brands from BrasilAPI (FIPE Data)</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co"># A string indicating the type of vehicle. Must be one of &quot;carros&quot;, &quot;motos&quot;, or &quot;caminhoes&quot;.</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>brazil_vehicles <span class="ot">&lt;-</span> <span class="fu">get_brazil_vehicle_brands</span>(<span class="st">&quot;motos&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">print</span>(brazil_vehicles)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; # A tibble: 94 × 2</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt;    nome     valor</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt;  1 ADLY     60   </span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt;  2 AGRALE   61   </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt;  3 APRILIA  62   </span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;  4 ATALA    63   </span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;  5 BAJAJ    64   </span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt;  6 BETA     65   </span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt;  7 BIMOTA   66   </span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt;  8 BMW      67   </span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt;  9 BRANDY   68   </span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; 10 byCristo 69   </span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt; # ℹ 84 more rows</span></span></code></pre></div>
+</div>
+<div id="get-municipalities-of-a-brazilian-state" class="section level3">
+<h3>Get Municipalities of a Brazilian State</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># A two-letter string representing the Brazilian state abbreviation (e.g., &quot;SP&quot;, &quot;RJ&quot;, &quot;BA&quot;).</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>brazil_Municipalities <span class="ot">&lt;-</span> <span class="fu">get_brazil_municipalities</span>(<span class="st">&quot;SP&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="fu">print</span>(brazil_Municipalities)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; # A tibble: 645 × 2</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;    nome                   codigo_ibge</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;                  &lt;chr&gt;      </span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt;  1 ADAMANTINA             3500105    </span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt;  2 ADOLFO                 3500204    </span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;  3 AGUAÍ                  3500303    </span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;  4 ÁGUAS DA PRATA         3500402    </span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;  5 ÁGUAS DE LINDÓIA       3500501    </span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt;  6 ÁGUAS DE SANTA BÁRBARA 3500550    </span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt;  7 ÁGUAS DE SÃO PEDRO     3500600    </span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt;  8 AGUDOS                 3500709    </span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt;  9 ALAMBARI               3500758    </span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; 10 ALFREDO MARCONDES      3500808    </span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; # ℹ 635 more rows</span></span></code></pre></div>
+</div>
+<div id="female-deaths-by-age-group-in-brazil" class="section level3">
+<h3>Female Deaths by Age Group in Brazil</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># Summarize total deaths by age and year</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> Brasil_females_df <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">group_by</span>(year1, age) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_deaths =</span> <span class="fu">sum</span>(deaths, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co"># Plot: Deaths by age group over time</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> total_deaths, <span class="at">color =</span> <span class="fu">as.factor</span>(year1))) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Female Deaths by Age Group in Brazil&quot;</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">&quot;Aggregated by year (year1)&quot;</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Age&quot;</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Number of Deaths&quot;</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;Year&quot;</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+<div id="dataset-suffixes" class="section level2">
+<h2>Dataset Suffixes</h2>
+<p>Each dataset in <code>BrazilDataAPI</code> is labeled with a
+<em>suffix</em> to indicate its structure and type:</p>
+<ul>
+<li><p><code>_df</code>: A standard data frame.</p></li>
+<li><p><code>_ts</code>: A time series object.</p></li>
+<li><p><code>_list</code>: A list object.</p></li>
+</ul>
+</div>
+<div id="datasets-included-in-brazildataapi" class="section level2">
+<h2>Datasets Included in BrazilDataAPI</h2>
+<p>In addition to API access functions, <code>BrazilDataAPI</code>
+provides several preloaded datasets offering insights into Brazil’s
+demographic structure, environmental conditions, cultural events, and
+public health records. Here are some featured examples:</p>
+<ul>
+<li><p><code>Brasil_females_df</code>: Brazilian Female Demographics
+&amp; Mortality A data frame containing population counts and mortality
+information for females in Brazil, disaggregated by federal states and
+abridged age groups, for the years 1991 and 2000.</p></li>
+<li><p><code>manaus_ts</code>: Monthly Average Heights of the Rio Negro
+at Manaus A univariate time series of monthly average river heights of
+the Rio Negro at Manaus. The series contains 1080 observations spanning
+90 years, from January 1903 to December 1992.</p></li>
+<li><p><code>Yellow_Fever_list</code>: Yellow Fever Outbreak in Brazil A
+list object containing information on the flow of Yellow Fever cases
+between five Brazilian states during the outbreak period from December
+2016 to May 2017.</p></li>
+</ul>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>The <code>BrazilDataAPI</code> package provides a robust set of tools
+to access open data about Brazil through RESTful APIs and curated
+datasets. It includes functions to retrieve information about postal
+codes, banks, economic rates, and company registrations via the
+<em>BrasilAPI</em>, as well as international country indicators through
+the <em>REST Countries API</em>. Additionally, it offers preloaded
+datasets on Brazil’s male and female population by state and year, film
+festivals, São Paulo’s emission factors, river data from Manaus, and
+records of yellow fever outbreaks.</p>
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;">
+
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
