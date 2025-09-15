@@ -36,6 +36,21 @@ brazil_Municipalities <- get_brazil_municipalities("SP")
 print(brazil_Municipalities)
 
 
+## ----brazil-gdp,echo = TRUE,message = FALSE,warning = FALSE,results = 'markup'----
+
+
+brazil_gdp <- head(get_brazil_gdp())
+
+print(brazil_gdp)
+
+
+## ----brazil-life-expectancy,echo = TRUE,message = FALSE,warning = FALSE,results = 'markup'----
+
+brazil_life_expectancy <- head(get_brazil_life_expectancy())
+
+print(brazil_life_expectancy)
+
+
 ## ----brazil-femalestats-plot, message=FALSE, warning=FALSE, fig.width=7, fig.height=5----
 
 # Summarize total deaths by age and year
