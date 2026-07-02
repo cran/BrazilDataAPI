@@ -1,3 +1,21 @@
+# BrazilDataAPI 0.3.0
+
+## Breaking Changes
+
+- `get_country_info_br()` was removed from the package. The 'REST Countries API' v3.1
+  endpoint it depended on was deprecated by its provider. The replacement v5 endpoint
+  now requires an API key, which is incompatible with CRAN's policy on packages using
+  Internet resources (they must work without user-provided credentials). As a
+  consequence, the 'REST Countries API' is no longer used by `BrazilDataAPI`.
+
+- `get_brazil_vehicle_brands()` was removed from the package due to persistent server
+  errors (HTTP status 500) returned by its underlying data source, which prevented the
+  function from reliably retrieving data and caused it to fail CRAN's requirement that
+  functions using Internet resources fail gracefully rather than error out.
+
+---
+
+
 # BrazilDataAPI 0.2.0
 
 ## Breaking Changes

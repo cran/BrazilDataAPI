@@ -1,6 +1,6 @@
 # BrazilDataAPI
 
-The `BrazilDataAPI` package provides a unified interface to access open data from the **BrasilAPI**, **REST Countries API**, **Nager.Date API**, and **World Bank API**, with a focus on *Brazil*. It allows users to easily retrieve up-to-date information on postal codes, banks, economic indicators, holidays, company registrations, international country-level data, public holidays information, and economic development data relevant to *Brazil*.
+The `BrazilDataAPI` package provides a unified interface to access open data from the **BrasilAPI**, **Nager.Date API**, and **World Bank API**, with a focus on *Brazil*. It allows users to easily retrieve up-to-date information on postal codes, banks, economic indicators, holidays, company registrations, and economic development data relevant to *Brazil*.
 
 In addition to API-access functions, the package includes a collection of curated datasets related to *Brazil*, covering diverse domains such as demographics (male and female population by state and year), river levels in *Manaus*, environmental emission factors in *São Paulo*, Brazilian film festivals, and historical yellow fever outbreaks.
 
@@ -42,11 +42,6 @@ Example: *get_brazil_municipalities("SP")*
 Example: *get_brazil_rate_name("CDI")*
 
 - `get_brazil_rates()`: Get Official Interest Rates and Indexes from Brazil
-
-- `get_brazil_vehicle_brands()`: Get Vehicle Brands from BrasilAPI (FIPE Data)
-Example: *get_brazil_vehicle_brands("motos")*,*get_brazil_vehicle_brands("caminhoes")*
-
-- `get_country_info_br()`: Get key country information for Brazil. 
 
 - `get_brazil_child_mortality()`: Get Brazil’s Under-5 Mortality Rate data from the World Bank.
 
@@ -97,9 +92,6 @@ A list object containing information on the flow of Yellow Fever cases between f
 
 # Load the package
 library(BrazilDataAPI)
-
-# Selected, essential information about Brazil
-get_country_info_br()
 
 # Get List of Banks in Brazil
 get_brazil_banks()

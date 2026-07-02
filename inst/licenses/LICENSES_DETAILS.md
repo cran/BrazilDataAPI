@@ -28,3 +28,7 @@ This package, `BrazilDataAPI`, includes datasets sourced from various R packages
 All datasets in this package are provided under the same licenses as their original sources. The licensing information and any specific attribution required for each dataset can be found within their respective packages. The user must adhere to the licensing terms specified by each original source.
 
 This package, `BrazilDataAPI`, is licensed under the GPL-3 License.
+
+## Copyright Notice
+
+© 2025-2026 Renzo Caceres Rossi. All rights reserved under the GPL-3.

@@ -18,15 +18,6 @@ brazil_rates_001 <- get_brazil_rates()
 print(brazil_rates_001)
 
 
-## ----brazil-Vehicles,echo = TRUE,message = FALSE,warning = FALSE,results = 'markup'----
-
-# A string indicating the type of vehicle. Must be one of "carros", "motos", or "caminhoes".
-
-brazil_vehicles <- get_brazil_vehicle_brands("motos")
-
-print(brazil_vehicles)
-
-
 ## ----brazil-Municipalities,echo = TRUE,message = FALSE,warning = FALSE,results = 'markup'----
 
 # A two-letter string representing the Brazilian state abbreviation (e.g., "SP", "RJ", "BA").
